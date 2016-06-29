@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">氢壁纸</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="no_permission_of_local_img">未取得读取本地图片的权限</string>
+    <string name="no_permission_of_write_img">未取得访问本地文件的权限</string>
+
+
+    <string name="save_successfully">保存图片成功</string>
+    <string name="save_failure">保存图片失败</string>
+    <string name="share_to">分享到...</string>
+    <string name="set_successfully">设置成功</string>
+</resources>

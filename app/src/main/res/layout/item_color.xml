@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="colorModel"
+            type="cn.zhj.hydrogenwallpager.model.ColorModel"/>
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <cn.zhj.hydrogenwallpager.components.CircleImageView
+            dynamic_color="@{colorModel.color}"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="16dp"
+            app:border_color="@color/white"
+            app:border_width="2dp"
+            />
+    </RelativeLayout>
+</layout>
