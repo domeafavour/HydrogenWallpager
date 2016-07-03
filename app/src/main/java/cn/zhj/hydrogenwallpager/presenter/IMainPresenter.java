@@ -30,5 +30,7 @@ public interface IMainPresenter {
 
     String getImagePath();
 
+    void onActivityDestroy();
+
 
 }

@@ -5,7 +5,6 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.WallpaperManager;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,17 +14,15 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.graphics.Palette;
 import android.util.Log;
 import android.widget.Toast;
 
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 
 import cn.zhj.hydrogenwallpager.R;
 import cn.zhj.hydrogenwallpager.utils.ImageUtil;
@@ -34,33 +31,18 @@ import cn.zhj.hydrogenwallpager.view.MainView;
 /**
  * Created by not_n on 2016/6/19.
  */
-public class MainPresenterImpl implements IMainPresenter, Palette.PaletteAsyncListener {
+public class MainPresenterImpl implements IMainPresenter, Palette.PaletteAsyncListener, Runnable {
 
-    Uri cropUri;
-    String temp = Environment.getExternalStorageDirectory().getAbsolutePath() + "/temp.jpg";
+    private final MainHandler mSaveHandler = new MainHandler(this);
+    private final String temp = Environment.getExternalStorageDirectory().getAbsolutePath() + "/temp.jpg";
+    private Uri cropUri;
     private Bitmap mTopPart;
     private Bitmap mBottomPart;
+    private Bitmap mFinal;
     private MainView mMainView;
-    private final Handler mSaveHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.what == 3) {
-                mMainView.onSaveResult(true);
-            }
-            switch (msg.what) {
-                case 3:
-                    mMainView.onSaveResult(true);
-                    break;
-                case 4:
-                    mMainView.onSaveResult(false);
-                    break;
-            }
-        }
-    };
     private Activity mActivity;
     private String imagePath;
     private String path;
-    private File imageFile;
 
     public MainPresenterImpl(MainView mMainView) {
         this.mMainView = mMainView;
@@ -84,16 +66,19 @@ public class MainPresenterImpl implements IMainPresenter, Palette.PaletteAsyncLi
     @Override
     public void selectColor(int color) {
         mBottomPart = ImageUtil.getColorImage(mMainView.getWidth(), mMainView.getBottomHeight(), color);
-        mMainView.onGetBottom(mBottomPart);
+        mMainView.onGetBottom(mBottomPart, color);
     }
 
     @Override
     public Bitmap getFinalBitmap() {
-        return ImageUtil.combine2Images(mTopPart, mBottomPart, true);
+        if (mFinal == null) {
+            mFinal = ImageUtil.combine2Images(mTopPart, mBottomPart, true);
+        }
+        return mFinal;
     }
 
     private void select() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType(IMAGE_TYPE);
         mActivity.startActivityForResult(intent, IMAGE_REQUEST_CODE);
     }
@@ -107,6 +92,7 @@ public class MainPresenterImpl implements IMainPresenter, Palette.PaletteAsyncLi
             case IMAGE_REQUEST_CODE:
                 try {
                     cropImage(data.getData());
+                    log(data.getData());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -128,15 +114,21 @@ public class MainPresenterImpl implements IMainPresenter, Palette.PaletteAsyncLi
         }
     }
 
+    private void log(Object msg) {
+        Log.i("MainPresenterImpl", String.valueOf(msg));
+    }
+
     private void cropImage(Uri uri) {
+        int width = mMainView.getWidth();
+        int topHeight = mMainView.getTopHeight();
         cropUri = Uri.fromFile(new File(temp));
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(uri, "image/*");
         intent.putExtra("crop", true);
-        intent.putExtra("aspectX", 1080);
-        intent.putExtra("aspectY", 787);    // 1920 * 0.41
-        intent.putExtra("outputX", mMainView.getWidth());
-        intent.putExtra("outputY", mMainView.getTopHeight());
+        intent.putExtra("aspectX", width);
+        intent.putExtra("aspectY", topHeight);
+        intent.putExtra("outputX", width);
+        intent.putExtra("outputY", topHeight);
         intent.putExtra("scale", true);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, cropUri);
         intent.putExtra("return-data", false);
@@ -158,7 +150,7 @@ public class MainPresenterImpl implements IMainPresenter, Palette.PaletteAsyncLi
                 break;
             case 23:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    save(getFinalBitmap(), path);
+                    save(path);
                 } else {
                     Toast.makeText(mActivity, R.string.no_permission_of_write_img, Toast.LENGTH_SHORT).show();
                 }
@@ -189,38 +181,18 @@ public class MainPresenterImpl implements IMainPresenter, Palette.PaletteAsyncLi
                     != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(mActivity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 23);
             } else {
-                save(bitmap, path);
+                save(path);
             }
         } else {
-            save(bitmap, path);
+            save(path);
         }
     }
 
-    private void save(Bitmap bitmap, String path) {
+    private void save(final String path) {
         this.path = path;
         final String imgName = System.currentTimeMillis() + ".jpg";
-        File file = new File(path);
-        if (!file.exists()) {
-            file.mkdir();
-        }
-        if (file.exists()) {
-            imagePath = path + File.separator + imgName;
-            try {
-                imageFile = new File(imagePath);
-                FileOutputStream outStream = new FileOutputStream(imageFile);
-                boolean isImgSaved = bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
-                if (isImgSaved) {
-                    mSaveHandler.sendEmptyMessage(3);
-                } else {
-                    mSaveHandler.sendEmptyMessage(4);
-                }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-                mSaveHandler.sendEmptyMessage(4);
-            }
-        } else {
-            throw new RuntimeException("Target path: " + path + " does not exist.");
-        }
+        imagePath = path + File.separator + imgName;
+        mSaveHandler.post(this);
     }
 
     @Override
@@ -229,7 +201,54 @@ public class MainPresenterImpl implements IMainPresenter, Palette.PaletteAsyncLi
     }
 
     @Override
+    public void onActivityDestroy() {
+        if (mTopPart != null) {
+            mTopPart.recycle();
+            mTopPart = null;
+        }
+        if (mBottomPart != null) {
+            mBottomPart.recycle();
+            mBottomPart = null;
+        }
+        if (mFinal != null) {
+            mFinal.recycle();
+            mFinal = null;
+        }
+    }
+
+    @Override
     public void onGenerated(Palette palette) {
         mMainView.onGetSwatches(palette.getSwatches());
     }
+
+    @Override
+    public void run() {
+        mSaveHandler.sendEmptyMessage(ImageUtil.save(getFinalBitmap(), path) ? 3 : 4);
+    }
+
+    private static final class MainHandler extends Handler {
+        private WeakReference<MainPresenterImpl> ref;
+
+        public MainHandler(MainPresenterImpl impl) {
+            ref = new WeakReference<>(impl);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            MainPresenterImpl impl = ref.get();
+            if (impl == null) {
+                return;
+            }
+            switch (msg.what) {
+                case 3:
+                    impl.mMainView.onSaveResult(true);
+                    break;
+                case 4:
+                    impl.mMainView.onSaveResult(false);
+                    break;
+            }
+
+        }
+    }
+
 }

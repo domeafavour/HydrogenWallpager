@@ -25,16 +25,18 @@
     </data>
 
     <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/wrapper"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="false">
+        android:fitsSystemWindows="false"
+        android:background="#ccc">
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="点击选择要制作的图片"
             android:onClick="@{eventHandler.onSelectImage}"
+            android:text="点击选择要制作的图片"
             android:visibility="@{loadModel.isFirstLoad ? View.VISIBLE : View.GONE}" />
 
         <LinearLayout
@@ -57,6 +59,7 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/color_recycler"
+            dynamic_margin_bottom="@{layoutParams.bottomMargin}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
@@ -65,9 +68,10 @@
 
         <net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu
             android:id="@+id/expanded_menu"
+            dynamic_margin_bottom="@{layoutParams.bottomMargin}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
+            android:layout_gravity="bottom|right"
             android:layout_margin="16dp"
             android:visibility="@{loadModel.isFirstLoad ? View.GONE : View.VISIBLE}"
             app:fab_labelStyle="@style/menu_labels_style"

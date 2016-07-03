@@ -7,11 +7,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity implements MainView, ColorAd
     private IMainPresenter mMainPresenter;
     private ActivityMainBinding mBinding;
     private ImageModel mImageModel;
-    private ColorAdapter mColorAdapter;
     private List<Palette.Swatch> mSwatches = new ArrayList<>();
     private LoadModel mLoadModel;
     private boolean isShare = false;
@@ -51,7 +50,8 @@ public class MainActivity extends AppCompatActivity implements MainView, ColorAd
         mTopHeight = (int) (height * (Constants.TOP_PERCENT / 100f));
         mBottomHeight = height - mTopHeight;
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        mBinding.setLayoutParams(new LayoutParamsModel(mTopHeight, mBottomHeight));
+        mBinding.setLayoutParams(new LayoutParamsModel(mTopHeight, mBottomHeight,
+                SystemUtil.getBottomStatusHeight(this)));
         mBinding.setEventHandler(new ImageHandler());
         mImageModel = new ImageModel();
         mBinding.setImgModel(mImageModel);
@@ -83,8 +83,9 @@ public class MainActivity extends AppCompatActivity implements MainView, ColorAd
     }
 
     @Override
-    public void onGetBottom(Bitmap bottom) {
+    public void onGetBottom(Bitmap bottom, int color) {
         mImageModel.bottom.set(bottom);
+        getWindow().setNavigationBarColor(color);
     }
 
     @Override
@@ -97,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements MainView, ColorAd
             colorModel.color.set(ImageUtil.getColorImage(size, size, swatch.getRgb()));
             colorModels.add(colorModel);
         }
-        mColorAdapter = new ColorAdapter(colorModels, this);
+        ColorAdapter mColorAdapter = new ColorAdapter(colorModels, this);
         mColorAdapter.setOnItemClickListener(this);
         mBinding.colorRecycler.setAdapter(mColorAdapter);
         // 默认是第一个颜色
@@ -125,9 +126,7 @@ public class MainActivity extends AppCompatActivity implements MainView, ColorAd
             doShare(new File(mMainPresenter.getImagePath()));
             isShare = false;
         } else {
-            Snackbar.make(mBinding.expandedMenu,
-                    isSuccess ? R.string.save_successfully : R.string.save_failure,
-                    Snackbar.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, isSuccess ? R.string.save_successfully : R.string.save_failure, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -157,6 +156,12 @@ public class MainActivity extends AppCompatActivity implements MainView, ColorAd
     }
 
     @Override
+    protected void onDestroy() {
+        mMainPresenter.onActivityDestroy();
+        super.onDestroy();
+    }
+
+    @Override
     public void onBackPressed() {
         if (mBinding.expandedMenu.isExpanded()) {
             mBinding.expandedMenu.collapse();
@@ -175,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements MainView, ColorAd
         public void setAsWallpaper(View view) {
             mMainPresenter.setWallPaper(mMainPresenter.getFinalBitmap());
             mBinding.expandedMenu.collapse();
-            Snackbar.make(mBinding.expandedMenu, "设置成功", Snackbar.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "设置成功", Toast.LENGTH_SHORT).show();
         }
 
         public void share(View view) {

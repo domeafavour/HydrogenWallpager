@@ -7,12 +7,14 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
+import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 /**
  * Created by Administrator on 2016/5/20 0020.
@@ -49,6 +51,38 @@ public class SystemUtil {
     public static int dip2px(Context context, float dpValue) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
+    }
+
+    //获取屏幕原始尺寸高度，包括虚拟功能键高度
+    public static int getDpi(Context context) {
+        int dpi = 0;
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = windowManager.getDefaultDisplay();
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        @SuppressWarnings("rawtypes")
+        Class c;
+        try {
+            c = Class.forName("android.view.Display");
+            @SuppressWarnings("unchecked")
+            Method method = c.getMethod("getRealMetrics", DisplayMetrics.class);
+            method.invoke(display, displayMetrics);
+            dpi = displayMetrics.heightPixels;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return dpi;
+    }
+
+    /**
+     * 获取 虚拟按键的高度
+     *
+     * @param context
+     * @return
+     */
+    public static int getBottomStatusHeight(Context context) {
+        int totalHeight = getDpi(context);
+        int contentHeight = getScreenHeight(context);
+        return totalHeight - contentHeight;
     }
 
     /**

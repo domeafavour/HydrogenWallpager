@@ -12,7 +12,7 @@ public interface MainView {
 
     void onGetTop(Bitmap top);
 
-    void onGetBottom(Bitmap bottom);
+    void onGetBottom(Bitmap bottom, int color);
 
     void onGetSwatches(List<Palette.Swatch> swatches);
 
