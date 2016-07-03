@@ -1,18 +1,15 @@
-package cn.zhj.hydrogenwallpager.model;
+package cn.zhj.hydrogenwallpaper.model;
 
 import android.databinding.BindingAdapter;
 import android.support.design.widget.CoordinatorLayout;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * Created by not_n on 2016/6/26.
- */
 public class LayoutParamsModel {
 
-    public float topHeight;
-    public float bottomHeight;
-    public float bottomMargin;
+    public final float topHeight;
+    public final float bottomHeight;
+    public final float bottomMargin;
 
     public LayoutParamsModel(float topHeight, float bottomHeight, float bottomMargin) {
         this.topHeight = topHeight;

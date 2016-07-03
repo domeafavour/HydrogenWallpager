@@ -1,4 +1,4 @@
-package cn.zhj.hydrogenwallpager.view;
+package cn.zhj.hydrogenwallpaper.view;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -17,18 +17,18 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.zhj.hydrogenwallpager.R;
-import cn.zhj.hydrogenwallpager.adapter.ColorAdapter;
-import cn.zhj.hydrogenwallpager.databinding.ActivityMainBinding;
-import cn.zhj.hydrogenwallpager.model.ColorModel;
-import cn.zhj.hydrogenwallpager.model.Constants;
-import cn.zhj.hydrogenwallpager.model.ImageModel;
-import cn.zhj.hydrogenwallpager.model.LayoutParamsModel;
-import cn.zhj.hydrogenwallpager.model.LoadModel;
-import cn.zhj.hydrogenwallpager.presenter.IMainPresenter;
-import cn.zhj.hydrogenwallpager.presenter.MainPresenterImpl;
-import cn.zhj.hydrogenwallpager.utils.ImageUtil;
-import cn.zhj.hydrogenwallpager.utils.SystemUtil;
+import cn.zhj.hydrogenwallpaper.R;
+import cn.zhj.hydrogenwallpaper.adapter.ColorAdapter;
+import cn.zhj.hydrogenwallpaper.databinding.ActivityMainBinding;
+import cn.zhj.hydrogenwallpaper.model.ColorModel;
+import cn.zhj.hydrogenwallpaper.model.Constants;
+import cn.zhj.hydrogenwallpaper.model.ImageModel;
+import cn.zhj.hydrogenwallpaper.model.LayoutParamsModel;
+import cn.zhj.hydrogenwallpaper.model.LoadModel;
+import cn.zhj.hydrogenwallpaper.presenter.IMainPresenter;
+import cn.zhj.hydrogenwallpaper.presenter.MainPresenterImpl;
+import cn.zhj.hydrogenwallpaper.utils.ImageUtil;
+import cn.zhj.hydrogenwallpaper.utils.SystemUtil;
 
 public class MainActivity extends AppCompatActivity implements MainView, ColorAdapter.OnItemClickListener {
 
@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements MainView, ColorAd
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
         shareIntent.setType("image/*");
-        startActivity(Intent.createChooser(shareIntent, "分享到"));
+        startActivity(Intent.createChooser(shareIntent, getString(R.string.share_to)));
         file.deleteOnExit();
     }
 
@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements MainView, ColorAd
         public void setAsWallpaper(View view) {
             mMainPresenter.setWallPaper(mMainPresenter.getFinalBitmap());
             mBinding.expandedMenu.collapse();
-            Toast.makeText(MainActivity.this, "设置成功", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, R.string.set_successfully, Toast.LENGTH_SHORT).show();
         }
 
         public void share(View view) {

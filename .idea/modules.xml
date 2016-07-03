@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/HydrogenWallpager.iml" filepath="$PROJECT_DIR$/HydrogenWallpager.iml" />
+      <module fileurl="file://$PROJECT_DIR$/HydrogenWallpaper.iml" filepath="$PROJECT_DIR$/HydrogenWallpaper.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

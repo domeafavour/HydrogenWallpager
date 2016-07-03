@@ -1,13 +1,10 @@
-package cn.zhj.hydrogenwallpager.model;
+package cn.zhj.hydrogenwallpaper.model;
 
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableField;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 
-/**
- * Created by not_n on 2016/6/26.
- */
 public class ImageModel {
 
     public ObservableField<Bitmap> top = new ObservableField<>();

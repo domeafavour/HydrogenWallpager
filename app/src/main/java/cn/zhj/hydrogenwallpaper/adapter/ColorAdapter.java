@@ -1,26 +1,21 @@
-package cn.zhj.hydrogenwallpager.adapter;
+package cn.zhj.hydrogenwallpaper.adapter;
 
 import android.content.Context;
-import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.List;
 
-import cn.zhj.hydrogenwallpager.R;
-import cn.zhj.hydrogenwallpager.databinding.ItemColorBinding;
-import cn.zhj.hydrogenwallpager.model.ColorModel;
+import cn.zhj.hydrogenwallpaper.R;
+import cn.zhj.hydrogenwallpaper.databinding.ItemColorBinding;
+import cn.zhj.hydrogenwallpaper.model.ColorModel;
 
-/**
- * Created by not_n on 2016/6/27.
- */
 public class ColorAdapter extends RecyclerView.Adapter<ColorAdapter.ViewHolder> {
 
-    private List<ColorModel> colorModels;
-    private LayoutInflater inflater;
+    private final List<ColorModel> colorModels;
+    private final LayoutInflater inflater;
     private OnItemClickListener onItemClickListener;
 
     public ColorAdapter(List<ColorModel> colorModels, Context context) {
@@ -35,14 +30,14 @@ public class ColorAdapter extends RecyclerView.Adapter<ColorAdapter.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         ColorModel model = colorModels.get(position);
         holder.colorBinding.setColorModel(model);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(onItemClickListener != null){
-                    onItemClickListener.onItemClick(position);
+                    onItemClickListener.onItemClick(holder.getAdapterPosition());
                 }
             }
         });
@@ -55,7 +50,7 @@ public class ColorAdapter extends RecyclerView.Adapter<ColorAdapter.ViewHolder> 
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        ItemColorBinding colorBinding;
+        final ItemColorBinding colorBinding;
 
         public ViewHolder(View itemView) {
             super(itemView);

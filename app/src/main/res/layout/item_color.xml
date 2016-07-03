@@ -5,14 +5,14 @@
     <data>
         <variable
             name="colorModel"
-            type="cn.zhj.hydrogenwallpager.model.ColorModel"/>
+            type="cn.zhj.hydrogenwallpaper.model.ColorModel"/>
     </data>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <cn.zhj.hydrogenwallpager.components.CircleImageView
+        <cn.zhj.hydrogenwallpaper.components.CircleImageView
             dynamic_color="@{colorModel.color}"
             android:layout_width="24dp"
             android:layout_height="24dp"

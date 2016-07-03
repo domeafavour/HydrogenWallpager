@@ -1,29 +1,19 @@
-package cn.zhj.hydrogenwallpager.utils;
+package cn.zhj.hydrogenwallpaper.utils;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
-import cn.zhj.hydrogenwallpager.R;
-
-/**
- * Created by not_n on 2016/6/19.
- */
 public class ImageUtil {
     /**
      * 把两个位图覆盖合成为一个位图，上下拼接
      *
      * @param isBaseMax 是否以高度大的位图为准，true则小图等比拉伸，false则大图等比压缩
-     * @return
+     * @return 拼接之后的图片
      */
     public static Bitmap combine2Images(Bitmap topBitmap, Bitmap bottomBitmap, boolean isBaseMax) {
 
@@ -31,7 +21,7 @@ public class ImageUtil {
                 || bottomBitmap == null || bottomBitmap.isRecycled()) {
             return null;
         }
-        int width = 0;
+        int width ;
         if (isBaseMax) {
             width = topBitmap.getWidth() > bottomBitmap.getWidth() ? topBitmap.getWidth() : bottomBitmap.getWidth();
         } else {

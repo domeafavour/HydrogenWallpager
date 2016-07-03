@@ -3,17 +3,17 @@
 
     <data>
 
-        <import type="cn.zhj.hydrogenwallpager.view.MainActivity.ImageHandler" />
+        <import type="cn.zhj.hydrogenwallpaper.view.MainActivity.ImageHandler" />
 
         <import type="android.view.View" />
 
         <variable
             name="layoutParams"
-            type="cn.zhj.hydrogenwallpager.model.LayoutParamsModel" />
+            type="cn.zhj.hydrogenwallpaper.model.LayoutParamsModel" />
 
         <variable
             name="imgModel"
-            type="cn.zhj.hydrogenwallpager.model.ImageModel" />
+            type="cn.zhj.hydrogenwallpaper.model.ImageModel" />
 
         <variable
             name="eventHandler"
@@ -21,7 +21,7 @@
 
         <variable
             name="loadModel"
-            type="cn.zhj.hydrogenwallpager.model.LoadModel" />
+            type="cn.zhj.hydrogenwallpaper.model.LoadModel" />
     </data>
 
     <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:onClick="@{eventHandler.onSelectImage}"
-            android:text="点击选择要制作的图片"
+            android:text="@string/click_to_pick_the_image_to_be_made"
             android:visibility="@{loadModel.isFirstLoad ? View.VISIBLE : View.GONE}" />
 
         <LinearLayout
@@ -71,7 +71,7 @@
             dynamic_margin_bottom="@{layoutParams.bottomMargin}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right"
+            android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
             android:visibility="@{loadModel.isFirstLoad ? View.GONE : View.VISIBLE}"
             app:fab_labelStyle="@style/menu_labels_style"

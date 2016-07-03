@@ -1,4 +1,4 @@
-package cn.zhj.hydrogenwallpager.components;
+package cn.zhj.hydrogenwallpaper.components;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -16,7 +16,8 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
-import cn.zhj.hydrogenwallpager.R;
+import cn.zhj.hydrogenwallpaper.R;
+
 
 /**
  * 一个来自互联网而又好用的类

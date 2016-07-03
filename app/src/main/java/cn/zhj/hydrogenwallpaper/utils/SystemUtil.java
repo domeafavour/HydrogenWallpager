@@ -1,10 +1,7 @@
-package cn.zhj.hydrogenwallpager.utils;
+package cn.zhj.hydrogenwallpaper.utils;
 
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.util.DisplayMetrics;
@@ -13,12 +10,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-/**
- * Created by Administrator on 2016/5/20 0020.
- */
 public class SystemUtil {
 
     /**

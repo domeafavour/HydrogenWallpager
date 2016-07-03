@@ -1,4 +1,4 @@
-package cn.zhj.hydrogenwallpager.presenter;
+package cn.zhj.hydrogenwallpaper.presenter;
 
 import android.Manifest;
 import android.annotation.TargetApi;
@@ -24,13 +24,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 
-import cn.zhj.hydrogenwallpager.R;
-import cn.zhj.hydrogenwallpager.utils.ImageUtil;
-import cn.zhj.hydrogenwallpager.view.MainView;
+import cn.zhj.hydrogenwallpaper.R;
+import cn.zhj.hydrogenwallpaper.utils.ImageUtil;
+import cn.zhj.hydrogenwallpaper.view.MainView;
 
-/**
- * Created by not_n on 2016/6/19.
- */
 public class MainPresenterImpl implements IMainPresenter, Palette.PaletteAsyncListener, Runnable {
 
     private final MainHandler mSaveHandler = new MainHandler(this);

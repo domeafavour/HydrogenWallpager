@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.3"
 
     defaultConfig {
-        applicationId "cn.zhj.hydrogenwallpager"
+        applicationId "cn.zhj.hydrogenwallpaper"
         minSdkVersion 21
         targetSdkVersion 24
         versionCode 1

@@ -1,11 +1,8 @@
-package cn.zhj.hydrogenwallpager.presenter;
+package cn.zhj.hydrogenwallpaper.presenter;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 
-/**
- * Created by not_n on 2016/6/19.
- */
 public interface IMainPresenter {
 
     String IMAGE_TYPE = "image/*";
